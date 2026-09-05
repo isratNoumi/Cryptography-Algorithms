@@ -41,7 +41,7 @@ The portfolio features a comprehensive visual breakdown of historical, symmetric
 
 ---
 
-## 🚀 How to Run Locally
+##  How to Run Locally
 
 ### Prerequisites
 *   Python 3.10 or higher
