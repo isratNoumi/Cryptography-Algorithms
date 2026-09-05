@@ -1,0 +1,17 @@
+<section id="tab-symmetric" class="tab-panel panel-grid hidden">
+  <article class="crypto-card">
+    <h2>DES</h2><p>64-bit block Feistel cipher with a 16-round key schedule.</p>
+    <label for="des-plaintext">Plaintext</label><input id="des-plaintext" placeholder="Enter plaintext string">
+    <div class="field-row"><label for="des-key">64-bit hex key</label><button class="link-button" onclick="generateDesKey()">Generate</button></div><input id="des-key" placeholder="16 hex characters">
+    <button class="primary-button" onclick="runDes()">Encrypt / Decrypt</button><div id="des-error" class="error-message hidden"></div>
+    <div id="des-results" class="result-panel hidden"><div class="result-grid"><div><label>Ciphertext</label><output id="des-ciphertext"></output></div><div><label>Decrypted</label><output id="des-decrypted"></output></div></div><label>Round keys</label><div id="des-keys-table" class="data-list"></div></div>
+  </article>
+  <article class="crypto-card">
+    <h2>AES</h2><p>Rijndael block cipher with selectable 128, 192, or 256-bit keys.</p>
+    <label for="aes-bits">Key strength</label><select id="aes-bits" onchange="generateAesKey()"><option value="128">AES-128</option><option value="192">AES-192</option><option value="256">AES-256</option></select>
+    <label for="aes-plaintext">Plaintext</label><input id="aes-plaintext" placeholder="Enter plaintext string">
+    <div class="field-row"><label for="aes-key">Hex key</label><button class="link-button" onclick="generateAesKey()">Generate</button></div><input id="aes-key" placeholder="Generated key">
+    <button class="primary-button" onclick="runAes()">Encrypt / Decrypt</button><div id="aes-error" class="error-message hidden"></div>
+    <div id="aes-results" class="result-panel hidden"><div class="result-grid"><div><label>Ciphertext</label><output id="aes-ciphertext"></output></div><div><label>Decrypted</label><output id="aes-decrypted"></output></div></div><label>Round keys</label><div id="aes-keys-table" class="data-list"></div></div>
+  </article>
+</section>

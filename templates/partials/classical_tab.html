@@ -1,0 +1,25 @@
+<section id="tab-classical" class="tab-panel panel-grid">
+  <article class="crypto-card">
+    <h2>Substitution Cipher</h2>
+    <p>Replace each alphabet letter with a unique letter from a permutation key.</p>
+    <textarea id="sub-plaintext" rows="3" placeholder="Enter plaintext message"></textarea>
+    <div class="field-row"><label for="sub-key">Permutation key</label><button class="link-button" onclick="setAlphabetKey()">Use default</button></div>
+    <input id="sub-key" maxlength="26" placeholder="QWERTYUIOPASDFGHJKLZXCVBNM">
+    <button class="primary-button" onclick="runSubstitution()">Encrypt / Decrypt</button>
+    <div id="sub-error" class="error-message hidden"></div>
+    <div id="sub-results" class="result-panel hidden">
+      <div class="result-grid"><div><label>Ciphertext</label><output id="sub-ciphertext"></output></div><div><label>Decrypted match</label><output id="sub-decrypted"></output></div></div>
+      <label>Frequency analysis</label><div id="sub-freq-bars" class="data-list"></div>
+      <label>Caesar shifts</label><div id="sub-caesar-shifts" class="data-list"></div>
+    </div>
+  </article>
+  <article class="crypto-card">
+    <h2>Double Transposition Cipher</h2>
+    <p>Transpose a message twice using row and column permutation keys.</p>
+    <textarea id="dt-plaintext" rows="3" placeholder="Enter plaintext message"></textarea>
+    <div class="two-column"><div><label for="dt-rowkey">Row key</label><input id="dt-rowkey" placeholder="2 4 0 3 1"></div><div><label for="dt-colkey">Column key</label><input id="dt-colkey" placeholder="0 2 1"></div></div>
+    <button class="primary-button" onclick="runDoubleTransposition()">Encrypt / Decrypt</button>
+    <div id="dt-error" class="error-message hidden"></div>
+    <div id="dt-results" class="result-panel hidden"><div class="result-grid"><div><label>Ciphertext</label><output id="dt-ciphertext"></output></div><div><label>Decrypted match</label><output id="dt-decrypted"></output></div></div><label>Frequency analysis</label><div id="dt-freq-bars" class="data-list"></div></div>
+  </article>
+</section>
