@@ -68,6 +68,12 @@ def get_caesar_brute_force(ciphertext):
 
 # ----------------- ROUTES -----------------
 
+def parse_int(value, default=None):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -317,9 +323,9 @@ def api_rsa_generate_keys():
 def api_rsa_encrypt():
     data = request.json or {}
     plaintext = data.get("plaintext", "").strip()
-    e = int(data.get("e", rsa_keys["e"] or 0))
-    n = int(data.get("n", rsa_keys["n"] or 0))
-    bits = int(data.get("bits", rsa_keys.get("bits", 512) or 512))
+    e = parse_int(data.get("e", rsa_keys.get("e")))
+    n = parse_int(data.get("n", rsa_keys.get("n")))
+    bits = parse_int(data.get("bits", rsa_keys.get("bits", 512)), 512)
 
     if not plaintext:
         return jsonify({"error": "Plaintext cannot be empty"}), 400
@@ -352,9 +358,9 @@ def api_rsa_encrypt():
 def api_rsa_decrypt():
     data = request.json or {}
     ciphertext_str = data.get("ciphertext", "").strip()
-    d = int(data.get("d", rsa_keys["d"] or 0))
-    n = int(data.get("n", rsa_keys["n"] or 0))
-    bits = int(data.get("bits", rsa_keys.get("bits", 512) or 512))
+    d = parse_int(data.get("d", rsa_keys.get("d")))
+    n = parse_int(data.get("n", rsa_keys.get("n")))
+    bits = parse_int(data.get("bits", rsa_keys.get("bits", 512)), 512)
 
     if not ciphertext_str:
         return jsonify({"error": "Ciphertext cannot be empty"}), 400
@@ -394,7 +400,7 @@ def api_rsa_decrypt():
 @app.route('/api/public/rsa/factor', methods=['POST'])
 def api_rsa_factor():
     data = request.json or {}
-    n = int(data.get("n", rsa_keys["n"] or 0))
+    n = parse_int(data.get("n", rsa_keys.get("n")))
     if not n:
         return jsonify({"error": "Invalid mod N"}), 400
     try:
