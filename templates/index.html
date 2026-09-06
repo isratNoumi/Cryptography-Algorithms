@@ -4,44 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSE721 Cryptography Portfolio</title>
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Your custom theme -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+
+    <!-- Optional: better fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
     <style>
-        .active-tab { background: var(--primary); color: #fff; box-shadow: 0 8px 20px #3b82f633; }
-        .data-list::-webkit-scrollbar { width: 8px; height: 8px; }
-        .data-list::-webkit-scrollbar-track { background: var(--panel-deep); border-radius: 8px; }
-        .data-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 8px; }
-        .data-list::-webkit-scrollbar-thumb:hover { background: var(--muted); }
-        #des-key, #aes-key, #sub-key { font-family: monospace; letter-spacing: .08em; }
-        .crypto-card input, .crypto-card select { height: 44px; padding: .625rem 1rem; line-height: 1.25rem; }
-        .crypto-card textarea { min-height: 96px; padding: .75rem 1rem; line-height: 1.5rem; letter-spacing: .02em; }
-        .crypto-card input::placeholder, .crypto-card textarea::placeholder { color: #94a3b8; opacity: .9; }
-        nav button { min-height: 44px; padding: .625rem 1rem; line-height: 1.25rem; font-size: .875rem; }
-        .primary-button, .secondary-button, .danger-button { min-height: 44px; padding: .75rem 1rem; line-height: 1.25rem; font-size: .875rem; letter-spacing: 0; }
-        .link-button { min-height: 28px; padding: .25rem .5rem; line-height: 1rem; }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        /* Active tab style */
+        .active-tab {
+            background: var(--primary);
+            color: #fff !important;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+        }
+
+        /* Scrollbar */
+        .data-list::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .data-list::-webkit-scrollbar-track {
+            background: var(--panel-deep);
+            border-radius: 8px;
+        }
+        .data-list::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 8px;
+        }
+        .data-list::-webkit-scrollbar-thumb:hover {
+            background: var(--muted);
+        }
+
+        /* Monospace inputs */
+        #des-key, #aes-key, #sub-key {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            letter-spacing: 0.06em;
+        }
+
+        /* Consistent control heights */
+        .crypto-card input,
+        .crypto-card select {
+            height: 44px;
+            padding: 0.625rem 1rem;
+        }
+
+        .crypto-card textarea {
+            min-height: 96px;
+            padding: 0.75rem 1rem;
+        }
+
+        .crypto-card input::placeholder,
+        .crypto-card textarea::placeholder {
+            color: #64748b;
+        }
+
+        nav button {
+            min-height: 44px;
+            transition: all 0.2s ease;
+        }
+
+        .primary-button,
+        .secondary-button,
+        .danger-button {
+            min-height: 44px;
+        }
     </style>
 </head>
-<body class="min-h-screen pb-12">
-    <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50">
+<body class="min-h-screen pb-16">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 border-b border-[var(--border)] bg-[#0a1210]/90 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-3">
-            <div class="bg-blue-600 p-2 rounded-lg text-white font-black text-xl tracking-tight">C721</div>
+            <div class="bg-emerald-600 px-2.5 py-1.5 rounded-lg text-white font-black text-lg tracking-tight shadow-lg shadow-emerald-500/20">
+                C721
+            </div>
             <div>
-                <h1 class="text-sm font-bold text-white sm:text-base">CSE721: Introduction to Cryptography</h1>
-                <p class="text-[10px] text-slate-400 sm:text-xs">Implementation and security analysis</p>
+                <h1 class="text-sm sm:text-base font-semibold text-white leading-tight">
+                    CSE721: Introduction to Cryptography
+                </h1>
+                <p class="text-[11px] text-slate-400">
+                    Implementation and security analysis
+                </p>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <nav class="flex flex-wrap gap-2 p-1 bg-slate-900 rounded-xl border border-slate-800/80 mb-6 max-w-2xl">
-            <button onclick="switchTab('classical')" id="tab-btn-classical" class="active-tab flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm text-white">Classical Cryptography</button>
-            <button onclick="switchTab('symmetric')" id="tab-btn-symmetric" class="flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm text-slate-300 hover:text-white">Symmetric-Key</button>
-            <button onclick="switchTab('publickey')" id="tab-btn-publickey" class="flex-1 py-2.5 px-4 rounded-lg font-semibold text-sm text-slate-300 hover:text-white">Public-Key</button>
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+
+        <!-- Tabs -->
+        <nav class="inline-flex p-1.5 bg-[#0a1210] rounded-xl border border-[var(--border)] mb-8 shadow-lg">
+            <button onclick="switchTab('classical')" id="tab-btn-classical"
+                class="active-tab flex-1 sm:flex-none px-5 py-2.5 rounded-lg font-medium text-sm text-white">
+                Classical Cryptography
+            </button>
+            <button onclick="switchTab('symmetric')" id="tab-btn-symmetric"
+                class="flex-1 sm:flex-none px-5 py-2.5 rounded-lg font-medium text-sm text-slate-400 hover:text-white hover:bg-white/5">
+                Symmetric-Key
+            </button>
+            <button onclick="switchTab('publickey')" id="tab-btn-publickey"
+                class="flex-1 sm:flex-none px-5 py-2.5 rounded-lg font-medium text-sm text-slate-400 hover:text-white hover:bg-white/5">
+                Public-Key
+            </button>
         </nav>
 
+        <!-- Tab Contents -->
         {% include 'partials/classical_tab.html' %}
         {% include 'partials/symmetric_tab.html' %}
         {% include 'partials/public_key_tab.html' %}
+
     </main>
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>

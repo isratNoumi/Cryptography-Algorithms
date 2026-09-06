@@ -1,17 +1,155 @@
 <section id="tab-classical" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Section A: Substitution Cipher -->
-            <div class="bg-cyber-900 rounded-2xl border border-slate-800/60 p-6 shadow-xl relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-cyan-500"></div>
-                <div class="flex items-center space-x-3 mb-4"><h2 class="text-lg font-bold text-white">Substitution Cipher</h2></div>
-                <p class="text-xs text-slate-400 mb-6">Monoalphabetic cipher in which each letter of the alphabet is replaced consistently with another unique letter.</p>
-                <div class="space-y-4"><div><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Plaintext Input</label><textarea id="sub-plaintext" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-600" placeholder="Enter plaintext message here..."></textarea></div><div><div class="flex justify-between items-center mb-2"><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Permutation Key (26 letters)</label><button onclick="setAlphabetKey()" class="text-[11px] text-blue-400 hover:underline">A-Z Default Map</button></div><input id="sub-key" type="text" maxlength="26" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors focus:ring-0 tracking-widest uppercase text-center font-bold" placeholder="QWERTYUIOPASDFGHJKLZXCVBNM"></div><div class="flex items-center space-x-3 pt-2"><button onclick="runSubstitution()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-lg shadow-blue-500/10 text-sm">Encrypt / Decrypt</button></div></div>
-                <div id="sub-error" class="hidden mt-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs px-4 py-3 rounded-xl"></div>
-                <div id="sub-results" class="hidden mt-6 pt-6 border-t border-slate-800/80 space-y-4"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-slate-950 p-4 rounded-xl border border-slate-800"><span class="block text-[10px] text-blue-400 font-bold uppercase tracking-wider">Ciphertext Output</span><div id="sub-ciphertext" class="text-sm font-semibold selection:bg-blue-600 mt-1 select-all break-all"></div></div><div class="bg-slate-950 p-4 rounded-xl border border-slate-800"><span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Decrypted Plaintext Match</span><div id="sub-decrypted" class="text-sm font-semibold selection:bg-blue-600 mt-1 select-all break-all"></div></div></div><div><span class="block text-xs text-slate-400 mb-2 font-bold uppercase tracking-wider">Frequency Analysis (Ciphertext)</span><div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 max-h-56 overflow-y-auto" id="sub-freq-bars"></div></div><div><span class="block text-xs text-slate-400 mb-2 font-bold uppercase tracking-wider">Caesar shift brute force (shifts 1-25)</span><div class="bg-slate-950 p-4 rounded-xl border border-slate-800 max-h-48 overflow-y-auto space-y-1.5 text-xs text-slate-400 hover:text-slate-300" id="sub-caesar-shifts"></div></div></div>
+
+    <!-- ==================== Substitution Cipher ==================== -->
+    <div class="crypto-card relative overflow-hidden">
+        <!-- Top accent line -->
+        <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+
+        <h2 class="text-lg font-semibold text-white mb-1">Substitution Cipher</h2>
+        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
+            Monoalphabetic cipher in which each letter of the alphabet is replaced consistently with another unique letter.
+        </p>
+
+        <div class="space-y-5">
+            <!-- Plaintext -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                    Plaintext Input
+                </label>
+                <textarea id="sub-plaintext" rows="3"
+                    class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-slate-200 
+                           focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 
+                           placeholder:text-slate-600 transition-all resize-none"
+                    placeholder="Enter plaintext message here..."></textarea>
             </div>
-            <!-- Section B: Double Transposition Cipher -->
-            <div class="bg-cyber-900 rounded-2xl border border-slate-800/60 p-6 shadow-xl relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-cyan-500"></div><div class="flex items-center space-x-3 mb-4"><h2 class="text-lg font-bold text-white">Double Transposition Cipher</h2></div><p class="text-xs text-slate-400 mb-6">A highly effective transposition method where characters are mapped twice row-by-row and column-by-column in matrix form based on coordinates.</p>
-                <div class="space-y-4"><div><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Plaintext Input</label><textarea id="dt-plaintext" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-600" placeholder="Enter message here..."></textarea></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Row Permutation Key (Size R)</label><input id="dt-rowkey" type="text" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors" placeholder="e.g. 2 4 0 3 1"></div><div><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Col Permutation Key (Size C)</label><input id="dt-colkey" type="text" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors" placeholder="e.g. 0 2 1"></div></div><div class="flex pt-2"><button onclick="runDoubleTransposition()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-lg shadow-blue-500/10 text-sm">Encrypt / Decrypt</button></div></div>
-                <div id="dt-error" class="hidden mt-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs px-4 py-3 rounded-xl"></div><div id="dt-results" class="hidden mt-6 pt-6 border-t border-slate-800/80 space-y-4"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-slate-950 p-4 rounded-xl border border-slate-800"><span class="block text-[10px] text-blue-400 font-bold uppercase tracking-wider">Ciphertext Output (with padding)</span><div id="dt-ciphertext" class="text-sm font-semibold selection:bg-blue-600 mt-1 select-all break-all text-white"></div></div><div class="bg-slate-950 p-4 rounded-xl border border-slate-800"><span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Decrypted Match Result</span><div id="dt-decrypted" class="text-sm font-semibold selection:bg-blue-600 mt-1 select-all break-all text-white"></div></div></div><div><span class="block text-xs text-slate-400 mb-2 font-bold uppercase tracking-wider">Frequency Analysis (Ciphertext)</span><div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2 max-h-56 overflow-y-auto" id="dt-freq-bars"></div></div></div>
+
+            <!-- Key -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        Permutation Key (26 letters)
+                    </label>
+                    <button onclick="setAlphabetKey()" 
+                        class="text-[11px] text-emerald-400 hover:text-emerald-300 transition-colors">
+                        A–Z Default Map
+                    </button>
+                </div>
+                <input id="sub-key" type="text" maxlength="26"
+                    class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm 
+                           text-center font-bold tracking-[0.2em] uppercase text-emerald-300
+                           focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+                    placeholder="QWERTYUIOPASDFGHJKLZXCVBNM">
             </div>
-        </section>
+
+            <!-- Action -->
+            <button onclick="runSubstitution()"
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-4 rounded-xl 
+                       transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 text-sm">
+                Encrypt / Decrypt
+            </button>
+        </div>
+
+        <!-- Error -->
+        <div id="sub-error" class="hidden mt-5 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs px-4 py-3 rounded-xl"></div>
+
+        <!-- Results -->
+        <div id="sub-results" class="hidden mt-8 pt-6 border-t border-slate-800/80 space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)]">
+                    <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Ciphertext Output</span>
+                    <div id="sub-ciphertext" class="text-sm font-medium text-slate-200 break-all select-all"></div>
+                </div>
+                <div class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)]">
+                    <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Decrypted Plaintext Match</span>
+                    <div id="sub-decrypted" class="text-sm font-medium text-slate-200 break-all select-all"></div>
+                </div>
+            </div>
+
+            <div>
+                <span class="block text-xs text-slate-400 font-semibold uppercase tracking-wider mb-2">Frequency Analysis (Ciphertext)</span>
+                <div id="sub-freq-bars" class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)] space-y-2 max-h-56 overflow-y-auto data-list"></div>
+            </div>
+
+            <div>
+                <span class="block text-xs text-slate-400 font-semibold uppercase tracking-wider mb-2">Caesar Shift Brute Force (1–25)</span>
+                <div id="sub-caesar-shifts" class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)] max-h-48 overflow-y-auto space-y-1.5 text-xs text-slate-400 data-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== Double Transposition Cipher ==================== -->
+    <div class="crypto-card relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+
+        <h2 class="text-lg font-semibold text-white mb-1">Double Transposition Cipher</h2>
+        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
+            A highly effective transposition method where characters are mapped twice (row-by-row and column-by-column) based on permutation keys.
+        </p>
+
+        <div class="space-y-5">
+            <!-- Plaintext -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                    Plaintext Input
+                </label>
+                <textarea id="dt-plaintext" rows="3"
+                    class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-slate-200 
+                           focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 
+                           placeholder:text-slate-600 transition-all resize-none"
+                    placeholder="Enter message here..."></textarea>
+            </div>
+
+            <!-- Keys -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                        Row Permutation Key
+                    </label>
+                    <input id="dt-rowkey" type="text"
+                        class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-slate-200
+                               focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+                        placeholder="e.g. 2 4 0 3 1">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                        Column Permutation Key
+                    </label>
+                    <input id="dt-colkey" type="text"
+                        class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-slate-200
+                               focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+                        placeholder="e.g. 0 2 1">
+                </div>
+            </div>
+
+            <!-- Action -->
+            <button onclick="runDoubleTransposition()"
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-4 rounded-xl 
+                       transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 text-sm">
+                Encrypt / Decrypt
+            </button>
+        </div>
+
+        <!-- Error -->
+        <div id="dt-error" class="hidden mt-5 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs px-4 py-3 rounded-xl"></div>
+
+        <!-- Results -->
+        <div id="dt-results" class="hidden mt-8 pt-6 border-t border-slate-800/80 space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)]">
+                    <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Ciphertext Output</span>
+                    <div id="dt-ciphertext" class="text-sm font-medium text-slate-200 break-all select-all"></div>
+                </div>
+                <div class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)]">
+                    <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Decrypted Match Result</span>
+                    <div id="dt-decrypted" class="text-sm font-medium text-slate-200 break-all select-all"></div>
+                </div>
+            </div>
+
+            <div>
+                <span class="block text-xs text-slate-400 font-semibold uppercase tracking-wider mb-2">Frequency Analysis (Ciphertext)</span>
+                <div id="dt-freq-bars" class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)] space-y-2 max-h-56 overflow-y-auto data-list"></div>
+            </div>
+        </div>
+    </div>
+
+</section>

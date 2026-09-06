@@ -1,14 +1,183 @@
 <section id="tab-symmetric" class="hidden grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Section A: DES Cipher -->
-            <div class="bg-cyber-900 rounded-2xl border border-slate-800/60 p-6 shadow-xl relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-cyan-500"></div><div class="flex items-center space-x-3 mb-4"><h2 class="text-lg font-bold text-white">DES (Data Encryption Standard)</h2></div><p class="text-xs text-slate-400 mb-6">64-bit block Feistel network implementation with 16 rounds of S-Box substitution and logic expansion checks.</p>
-                <div class="space-y-4"><div><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Plaintext Message</label><input id="des-plaintext" type="text" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-600" placeholder="Enter plaintext string..."></div><div><div class="flex justify-between items-center mb-2"><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">64-bit Hex Key (Auto-Generated or custom)</label><button onclick="generateDesKey()" class="text-[11px] text-blue-400 hover:underline">Generate Keys</button></div><input id="des-key" type="text" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors uppercase text-center select-all" placeholder="HEX KEY (16 chars, e.g. E55D9652BE84FD71)"></div><div class="flex items-center space-x-3 pt-2"><button onclick="runDes()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-lg shadow-blue-500/10 text-sm">Encrypt / Decrypt</button></div></div>
-                <div id="des-error" class="hidden mt-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs px-4 py-3 rounded-xl"></div><div id="des-results" class="hidden mt-6 pt-6 border-t border-slate-800/80 space-y-4"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-slate-950 p-4 rounded-xl border border-slate-800"><span class="block text-[10px] text-blue-400 font-bold uppercase tracking-wider">Ciphertext Output (Hex)</span><div id="des-ciphertext" class="text-sm font-semibold selection:bg-blue-600 mt-1 select-all break-all text-white mono"></div></div><div class="bg-slate-950 p-4 rounded-xl border border-slate-800"><span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Decrypted Output</span><div id="des-decrypted" class="text-sm font-semibold selection:bg-blue-600 mt-1 select-all break-all text-white"></div></div></div><div><span class="block text-xs text-slate-400 mb-2 font-bold uppercase tracking-wider">All 16 Round Keys (Key Schedule)</span><div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden"><table class="min-w-full divide-y divide-slate-800 text-sm"><thead class="bg-slate-900/60"><tr><th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-400 uppercase">Round</th><th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-400 uppercase">Derived Round Key (Hex, 48 bits)</th></tr></thead><tbody id="des-keys-table" class="divide-y divide-slate-800/50 text-slate-300 font-mono text-xs"></tbody></table></div></div></div>
+
+    <!-- ==================== DES ==================== -->
+    <div class="crypto-card relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+
+        <h2 class="text-lg font-semibold text-white mb-1">DES (Data Encryption Standard)</h2>
+        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
+            64-bit block Feistel network with 16 rounds of S-Box substitution and expansion.
+        </p>
+
+        <div class="space-y-5">
+            <!-- Plaintext -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                    Plaintext Message
+                </label>
+                <input id="des-plaintext" type="text"
+                    class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-slate-200
+                           focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 
+                           placeholder:text-slate-600 transition-all"
+                    placeholder="Enter plaintext string...">
             </div>
-            <!-- Section B: AES Cipher -->
-            <div class="bg-cyber-900 rounded-2xl border border-slate-800/60 p-6 shadow-xl relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 to-cyan-500"></div><div class="flex items-center space-x-3 mb-4"><h2 class="text-lg font-bold text-white">AES (Advanced Encryption Standard)</h2></div><p class="text-xs text-slate-400 mb-6 font-medium">Standardized Rijndael block cipher featuring ShiftRows, SubBytes, AddRoundKey and GF(2⁸) MixColumns multipliers.</p>
-                <div class="space-y-4"><div><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">AES Key Strength Variant</label><select id="aes-bits" onchange="generateAesKey()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors text-white"><option value="128">AES-128 (10 rounds, 16-byte key)</option><option value="192">AES-192 (12 rounds, 24-byte key)</option><option value="256">AES-256 (14 rounds, 32-byte key)</option></select></div><div><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Plaintext Input Message</label><input id="aes-plaintext" type="text" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors placeholder:text-slate-600" placeholder="Enter plaintext string..."></div><div><div class="flex justify-between items-center mb-2"><label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider">Hex expansion Key</label><button onclick="generateAesKey()" class="text-[11px] text-blue-400 hover:underline">Generate Keys</button></div><input id="aes-key" type="text" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition-colors uppercase text-center select-all font-mono" placeholder="HEX KEY"></div><div class="flex items-center space-x-3 pt-2"><button onclick="runAes()" class="flex-1 bg-violet-600 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-lg shadow-violet-500/10 text-sm">Encrypt / Decrypt</button></div></div>
-                <div id="aes-error" class="hidden mt-4 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs px-4 py-3 rounded-xl"></div><div id="aes-results" class="hidden mt-6 pt-6 border-t border-slate-800/80 space-y-4"><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-slate-950 p-4 rounded-xl border border-slate-800"><span class="block text-[10px] text-violet-400 font-bold uppercase tracking-wider">Ciphertext Output (Hex)</span><div id="aes-ciphertext" class="text-sm font-semibold selection:bg-violet-600 mt-1 select-all break-all text-white mono pointer-events-auto"></div></div><div class="bg-slate-950 p-4 rounded-xl border border-slate-800"><span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider">Decrypted Original Text</span><div id="aes-decrypted" class="text-sm font-semibold selection:bg-violet-600 mt-1 select-all break-all text-white"></div></div></div><div><span class="block text-xs text-slate-400 mb-2 font-bold uppercase tracking-wider">Round Keys (Rijndael Key Schedule)</span><div class="bg-slate-950 border border-slate-800 rounded-xl max-h-64 overflow-y-auto"><table class="min-w-full divide-y divide-slate-800 text-sm"><thead class="bg-slate-900/60 sticky top-0"><tr><th class="px-4 py-2 text-left text-xs font-semibold text-slate-400 uppercase">Round</th><th class="px-4 py-2 text-left text-xs font-semibold text-slate-400 uppercase">Extended State Bytes</th></tr></thead><tbody id="aes-keys-table" class="divide-y divide-slate-800/50 text-slate-300 font-mono text-xs"></tbody></table></div></div></div>
+
+            <!-- Key -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        64-bit Hex Key
+                    </label>
+                    <button onclick="generateDesKey()" 
+                        class="text-[11px] text-emerald-400 hover:text-emerald-300 transition-colors">
+                        Generate Key
+                    </button>
+                </div>
+                <input id="des-key" type="text"
+                    class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm 
+                           text-center font-mono tracking-wider uppercase text-emerald-300
+                           focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+                    placeholder="E55D9652BE84FD71">
             </div>
-        </section>
+
+            <!-- Action -->
+            <button onclick="runDes()"
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-4 rounded-xl 
+                       transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 text-sm">
+                Encrypt / Decrypt
+            </button>
+        </div>
+
+        <!-- Error -->
+        <div id="des-error" class="hidden mt-5 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs px-4 py-3 rounded-xl"></div>
+
+        <!-- Results -->
+        <div id="des-results" class="hidden mt-8 pt-6 border-t border-slate-800/80 space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)]">
+                    <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Ciphertext (Hex)</span>
+                    <div id="des-ciphertext" class="text-sm font-medium text-slate-200 break-all select-all font-mono"></div>
+                </div>
+                <div class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)]">
+                    <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Decrypted Output</span>
+                    <div id="des-decrypted" class="text-sm font-medium text-slate-200 break-all select-all"></div>
+                </div>
+            </div>
+
+            <div>
+                <span class="block text-xs text-slate-400 font-semibold uppercase tracking-wider mb-2">
+                    All 16 Round Keys (Key Schedule)
+                </span>
+                <div class="bg-[#070d0b] border border-[var(--border)] rounded-xl overflow-hidden">
+                    <table class="min-w-full divide-y divide-slate-800 text-sm">
+                        <thead class="bg-[#0c1412]">
+                            <tr>
+                                <th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-400 uppercase">Round</th>
+                                <th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-400 uppercase">Round Key (48-bit Hex)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="des-keys-table" class="divide-y divide-slate-800/50 text-slate-300 font-mono text-xs"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== AES ==================== -->
+    <div class="crypto-card relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+
+        <h2 class="text-lg font-semibold text-white mb-1">AES (Advanced Encryption Standard)</h2>
+        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
+            Rijndael block cipher with ShiftRows, SubBytes, MixColumns and AddRoundKey operations.
+        </p>
+
+        <div class="space-y-5">
+            <!-- Key Size -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                    AES Key Strength
+                </label>
+                <select id="aes-bits" onchange="generateAesKey()"
+                    class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-slate-200
+                           focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition-all">
+                    <option value="128">AES-128 (10 rounds • 16-byte key)</option>
+                    <option value="192">AES-192 (12 rounds • 24-byte key)</option>
+                    <option value="256">AES-256 (14 rounds • 32-byte key)</option>
+                </select>
+            </div>
+
+            <!-- Plaintext -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                    Plaintext Input
+                </label>
+                <input id="aes-plaintext" type="text"
+                    class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm text-slate-200
+                           focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 
+                           placeholder:text-slate-600 transition-all"
+                    placeholder="Enter plaintext string...">
+            </div>
+
+            <!-- Key -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                        Hex Key
+                    </label>
+                    <button onclick="generateAesKey()" 
+                        class="text-[11px] text-emerald-400 hover:text-emerald-300 transition-colors">
+                        Generate Key
+                    </button>
+                </div>
+                <input id="aes-key" type="text"
+                    class="w-full bg-[#070d0b] border border-[var(--border)] rounded-xl px-4 py-3 text-sm 
+                           text-center font-mono tracking-wider uppercase text-emerald-300
+                           focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/30 transition-all"
+                    placeholder="HEX KEY">
+            </div>
+
+            <!-- Action -->
+            <button onclick="runAes()"
+                class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-4 rounded-xl 
+                       transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 text-sm">
+                Encrypt / Decrypt
+            </button>
+        </div>
+
+        <!-- Error -->
+        <div id="aes-error" class="hidden mt-5 bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs px-4 py-3 rounded-xl"></div>
+
+        <!-- Results -->
+        <div id="aes-results" class="hidden mt-8 pt-6 border-t border-slate-800/80 space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)]">
+                    <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Ciphertext (Hex)</span>
+                    <div id="aes-ciphertext" class="text-sm font-medium text-slate-200 break-all select-all font-mono"></div>
+                </div>
+                <div class="bg-[#070d0b] p-4 rounded-xl border border-[var(--border)]">
+                    <span class="block text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1">Decrypted Text</span>
+                    <div id="aes-decrypted" class="text-sm font-medium text-slate-200 break-all select-all"></div>
+                </div>
+            </div>
+
+            <div>
+                <span class="block text-xs text-slate-400 font-semibold uppercase tracking-wider mb-2">
+                    Round Keys (Rijndael Key Schedule)
+                </span>
+                <div class="bg-[#070d0b] border border-[var(--border)] rounded-xl max-h-64 overflow-y-auto">
+                    <table class="min-w-full divide-y divide-slate-800 text-sm">
+                        <thead class="bg-[#0c1412] sticky top-0">
+                            <tr>
+                                <th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-400 uppercase">Round</th>
+                                <th class="px-4 py-2.5 text-left text-xs font-semibold text-slate-400 uppercase">Extended State</th>
+                            </tr>
+                        </thead>
+                        <tbody id="aes-keys-table" class="divide-y divide-slate-800/50 text-slate-300 font-mono text-xs"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
