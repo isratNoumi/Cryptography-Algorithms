@@ -133,11 +133,18 @@ def api_double_transposition():
         return jsonify({"error": "Plaintext, Row Key and Column Key cannot be empty"}), 400
 
     try:
-        # Permutation keys parse helper
-        row_key = list(map(int, row_key_str.split()))
-        col_key = list(map(int, col_key_str.split()))
+        # Permutation keys parse helper - support space and comma separated
+        row_tokens = row_key_str.replace(',', ' ').split()
+        col_tokens = col_key_str.replace(',', ' ').split()
+        row_key = list(map(int, row_tokens))
+        col_key = list(map(int, col_tokens))
     except ValueError:
-        return jsonify({"error": "Keys must contain only integers separated by spaces"}), 400
+        return jsonify({"error": "Keys must contain only integers separated by spaces or commas"}), 400
+
+    if len(row_key) < 2:
+        return jsonify({"error": "Row key must contain at least 2 values (e.g. 2 4 0 3 1)"}), 400
+    if len(col_key) < 2:
+        return jsonify({"error": "Column key must contain at least 2 values (e.g. 0 2 1)"}), 400
 
     # Key validations
     if sorted(row_key) != list(range(len(row_key))):
