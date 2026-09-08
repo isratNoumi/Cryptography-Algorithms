@@ -1,5 +1,5 @@
 # CSE721: Introduction to Cryptography
-## Portfolio of Classical & Modern Cryptographic Algorithms
+## Classical & Modern Cryptographic Algorithms
 
 Deployed URL -- https://cryptography-algorithms-qxti.onrender.com/
 
