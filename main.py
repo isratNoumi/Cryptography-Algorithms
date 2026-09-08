@@ -1,8 +1,11 @@
-from classical import run_substitution_cipher, run_double_transposition
-from des import run_des
-from aes import run_aes
-from rsa_final import run_rsa
-from ecc import run_ecc
+from crypto import (
+    run_substitution_cipher,
+    run_double_transposition,
+    run_des,
+    run_aes,
+    run_rsa,
+    run_ecc,
+)
 
 
 def classical_section():
@@ -83,4 +86,5 @@ def main():
             print("Invalid choice, pick 1 to 4.")
 
 
-main()
+if __name__ == '__main__':
+    main()

@@ -3,23 +3,14 @@ import math
 import string
 from flask import Flask, jsonify, render_template, request
 
-# Import our custom cryptography logic
-from classical import (
+# Import our modular cryptography package
+from crypto import (
     sub_encrypt, sub_decrypt,
     double_transpose_encrypt, double_transpose_decrypt,
-    validate_sub_key, parse_permutation_key
-)
-from des import (
-    generate_round_keys, des_encrypt, des_decrypt,
-    bits_to_bytes
-)
-from aes import (
-    get_aes_settings, aes_encrypt, aes_decrypt, get_round_keys
-)
-from rsa_final import (
-    rsa_generate_keys, rsa_encrypt, rsa_decrypt, rsa_keys, factorization_attack
-)
-from ecc import (
+    validate_sub_key, parse_permutation_key,
+    generate_round_keys, des_encrypt, des_decrypt, bits_to_bytes,
+    get_aes_settings, aes_encrypt, aes_decrypt, get_round_keys,
+    rsa_generate_keys, rsa_encrypt, rsa_decrypt, rsa_keys, factorization_attack,
     point_add, scalar_mul, list_subgroup, is_on_curve
 )
 

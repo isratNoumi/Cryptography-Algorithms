@@ -1,6 +1,11 @@
 import random
 import math
 
+try:
+    from .math_utils import mod_inverse
+except ImportError:
+    from math_utils import mod_inverse
+
 
 FIXED_BASES_64BIT = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
 
@@ -70,40 +75,6 @@ def generate_prime(bits):
             return n
 
 
-def mod_inverse(e, phi):
-    print(f"\n  Finding d such that {e} * d = 1 mod {phi}")
-    print(f"  GCD({phi}, {e}) = 1\n")
-    col = 12
-    print(f"  {'Step':>4} | {'g':>4} | {'r1':>{col}} | {'r2':>{col}} | {'r':>{col}} | {'t0':>{col}} | {'t1':>{col}} | {'t2':>{col}}")
-    print(f"  {'-'*4}-+-{'-'*4}-+-{'-'*col}-+-{'-'*col}-+-{'-'*col}-+-{'-'*col}-+-{'-'*col}-+-{'-'*col}")
- 
-    r1 = phi
-    r2 = e
-    t0 = 0 
-    t1 = 1
-    step = 1
- 
-    while r2 != 0:
-        g  = r1 // r2
-        r  = r1 % r2
-        t2 = t0 - g * t1
- 
-        print(f"  {step:>4} | {g:>4} | {r1:>{col}} | {r2:>{col}} | {r:>{col}} | {t0:>{col}} | {t1:>{col}} | {t2:>{col}}")
-        r1 = r2
-        r2 = r
-        t0 = t1
-        t1 = t2
-        step = step + 1
- 
-    if r1 != 1:
-        raise ValueError("e and phi are not coprime — cannot find d.")
- 
-    d = t0 % phi
-    return d
- 
-
-
-
 rsa_keys = {
     "p": None, "q": None, "n": None,
     "e": None, "d": None, "phi": None,
@@ -136,7 +107,7 @@ def rsa_generate_keys(bits):
         e = e + 2  
 
     # Step 5: find d such that e * d = 1 mod phi
-    d = mod_inverse(e, phi)
+    d = mod_inverse(e, phi, verbose=True)
 
     rsa_keys.update({
         "p": p, "q": q, "n": n,
