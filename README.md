@@ -59,7 +59,7 @@ The portfolio features a comprehensive visual breakdown of historical, symmetric
     python -m venv venv
     .\venv\Scripts\activate      # For Windows Powershell / Command Prompt
     # source venv/bin/activate  # For macOS/Linux
-    pip install flask
+    pip install requirements.txt
     ```
 3.  **Launch the flask server**:
     ```bash
